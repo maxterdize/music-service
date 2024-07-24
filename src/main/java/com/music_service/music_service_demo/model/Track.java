@@ -37,23 +37,32 @@ public class Track {
     private Set<Artist> artists;
     @ElementCollection
     private Set<CountryCode> availableMarkets;
+    @Column
     private Integer discNumber;
+    @Column
     private Integer durationMs;
+    @Column
     private Boolean explicit;
     private ExternalId externalIds;
     private ExternalUrl externalUrls;
     @Column(name = "track_href")
     private String href;
+    @Column
     private Boolean isPlayable;
     @OneToOne
     private TrackLink linkedFrom;
     @Embedded
     private Restriction restrictions;
+    @Column
     private Integer popularity;
+    @Column
     private String previewUrl;
+    @Column
     private Integer trackNumber;
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     private ModelObjectType type;
+    @Column
     private String uri;
+    @Column
     private Boolean isLocal;
 }

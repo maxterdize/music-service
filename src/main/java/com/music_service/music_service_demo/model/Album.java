@@ -25,7 +25,9 @@ public class Album {
 
     @Id
     private String id;
+    @Column
     private AlbumType albumType;
+    @Column
     private Integer totalTracks;
     @ElementCollection
     private Set<CountryCode> availableMarkets;
@@ -34,11 +36,15 @@ public class Album {
     private String href;
     @ElementCollection
     private Set<Image> images;
+    @Column
     private String name;
+    @Column
     private String releaseDate;
+    @Column
     private String releaseDatePrecision;
     @Embedded
     private Restriction restrictions;
+    @Column
     private String uri;
     @ManyToMany
     @JoinTable(name = JOIN_TABLE_NAME,

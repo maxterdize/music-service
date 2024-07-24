@@ -27,8 +27,11 @@ public class Artist {
     private String id;
     @Column(name = "artist_href")
     private String href;
+    @Column
     private String name;
+    @Column
     private String uri;
+    @Column
     private Integer popularity;
     @ElementCollection
     private Set<Image> images;

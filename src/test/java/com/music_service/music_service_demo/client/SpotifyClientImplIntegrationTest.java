@@ -5,6 +5,8 @@ import com.music_service.music_service_demo.model.Track;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -19,6 +21,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @SpringBootTest
 public class SpotifyClientImplIntegrationTest {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String GET_TRACK_PATH = "/v1/tracks";
 
@@ -50,6 +54,8 @@ public class SpotifyClientImplIntegrationTest {
                 .andRespond(withSuccess(gson.toJson(mockTrack), MediaType.APPLICATION_JSON));
 
        Track returnedTrack = spotifyClientImpl.getTrackById(TRACK_ID);
+
+       logger.info(returnedTrack.toString());
 
         assertEquals(mockTrack.getId(), returnedTrack.getId());
         assertEquals(mockTrack.getName(), returnedTrack.getName());

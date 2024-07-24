@@ -14,5 +14,6 @@ public class Followers {
 
     @Column(name = "followers_href")
     private String href;
+    @Column
     private Integer total;
 }
