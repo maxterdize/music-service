@@ -13,12 +13,15 @@ public class SpotifyClientImpl implements SpotifyClient{
 
     private final RestTemplateBuilder restTemplateBuilder;
 
-    private String GET_TRACK_PATH = "/v1/tracks";
+    private String GET_TRACK_PATH = "/v1/tracks/";
 
     @Override
     public Track getTrackById(String trackId) {
+        if (trackId == null || trackId.isEmpty()) {
+            throw new IllegalArgumentException("Track ID must not be null or empty.");
+        }
         RestTemplate restTemplate = restTemplateBuilder.build();
-        String path = GET_TRACK_PATH + "/" + trackId;
+        String path = GET_TRACK_PATH + trackId;
 
         ResponseEntity<Track> trackResponseEntity = restTemplate.getForEntity(path, Track.class);
 

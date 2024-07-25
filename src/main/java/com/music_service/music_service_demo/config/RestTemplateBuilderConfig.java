@@ -43,6 +43,7 @@ public class RestTemplateBuilderConfig {
         assert SPOTIFY_BASE_URL != null;
 
         return configurer.configure(new RestTemplateBuilder())
+                .basicAuthentication("spotify", "spotify")
                 .additionalInterceptors(interceptor)
                 .uriTemplateHandler(new DefaultUriBuilderFactory(SPOTIFY_BASE_URL));
     }

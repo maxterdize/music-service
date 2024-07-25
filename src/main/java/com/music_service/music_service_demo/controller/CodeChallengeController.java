@@ -16,6 +16,7 @@ public class CodeChallengeController {
 
     @GetMapping(value = "/getTrackMetadata", produces = "application/json")
     public ResponseEntity<Track> getTrackMetadata(@RequestParam String isrc){
-        return ResponseEntity.ok(new Track());
+
+        return ResponseEntity.ok(spotifyTrackService.getTrackById(isrc));
     }
 }
