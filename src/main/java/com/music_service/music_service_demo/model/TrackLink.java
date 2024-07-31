@@ -4,22 +4,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.music_service.music_service_demo.enums.ModelObjectType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "track_link")
 public class TrackLink {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private BigInteger primary_key;
+
+    @Id
+    @Column(name = "secondary_id")
     private String id;
     @Column
     @JsonProperty("is_playable")

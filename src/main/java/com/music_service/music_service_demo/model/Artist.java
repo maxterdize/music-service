@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.music_service.music_service_demo.enums.ModelObjectType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "artist")
 public class Artist {
@@ -38,25 +38,38 @@ public class Artist {
     @Column
     @JsonProperty("popularity")
     private Integer popularity;
-    @ElementCollection
+    @Builder.Default
+    @OneToMany(mappedBy = "artist")
     @JsonProperty("images")
-    private Set<Image> images;
+    private Set<Image> images = new HashSet<>();
+    @Builder.Default
     @ElementCollection
     @JsonProperty("external_urls")
-    private Map<String, String> externalUrls;
+    private Map<String, String> externalUrls = new HashMap<>();
     @Embedded
     @JsonProperty("followers")
     private Followers followers;
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     @JsonProperty("type")
     private ModelObjectType type;
+    @Builder.Default
     @ElementCollection
     @JsonProperty("genres")
-    private Set<String> genres;
+    private Set<String> genres = new HashSet<>();
 
 
-    @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Track> tracks;
+    @Builder.Default
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "track_artist",
+        joinColumns = @JoinColumn(name = "artist_id"),
+        inverseJoinColumns = @JoinColumn(name = "track_id"))
+    private Set<Track> tracks = new HashSet<>();
+
+    @Builder.Default
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(joinColumns = @JoinColumn(name = "artist_id"),
+                inverseJoinColumns = @JoinColumn(name = "album_id"))
+    private Set<Album> albums = new HashSet<>();
 
 
 

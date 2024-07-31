@@ -6,21 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.music_service.music_service_demo.enums.AlbumType;
 import com.neovisionaries.i18n.CountryCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.math.BigInteger;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
-@Data
 @Entity
 @Table(name = "album")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,9 +22,8 @@ public class Album {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "id")
-    private BigInteger primary_key;
+    private Long primary_key;
 
     @JsonProperty("id")
     @Column(name = "secondary_id")
@@ -42,18 +35,23 @@ public class Album {
     @Column
     @JsonProperty("total_tracks")
     private Integer totalTracks;
-    @ElementCollection
+    @Column
+    @Enumerated
+    @Builder.Default
+    @ElementCollection(targetClass = CountryCode.class)
     @JsonProperty("available_markets")
-    private Set<CountryCode> availableMarkets;
+    private Set<CountryCode> availableMarkets = new HashSet<>();
+    @Builder.Default
     @ElementCollection
     @JsonProperty("external_urls")
-    private Map<String, String> externalUrls;
+    private Map<String, String> externalUrls = new HashMap<>();
     @Column(name = "album_href")
     @JsonProperty("href")
     private String href;
-    @ElementCollection
+    @Builder.Default
+    @OneToMany(mappedBy = "album")
     @JsonProperty("images")
-    private Set<Image> images;
+    private Set<Image> images= new HashSet<>();
     @Column
     @JsonProperty("name")
     private String name;
@@ -69,18 +67,27 @@ public class Album {
     @Column
     @JsonProperty("uri")
     private String uri;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "album_artist",
-            joinColumns = @JoinColumn(name = "album_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"))
+    @Builder.Default
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "album_artist",
+            joinColumns = @JoinColumn(name = "album_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id"))
     @JsonProperty("artists")
-    private Set<Artist> artists;
+    private Set<Artist> artists = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "album")
-    private Set<Track> tracks;
+    private Set<Track> tracks = new HashSet<>();
 
+    public void addArtist(Artist artist) {
+        this.artists.add(artist);
+        artist.getAlbums().add(this);
+    }
 
+    public void removeArtist(Artist artist) {
+        this.artists.remove(artist);
+        artist.getAlbums().remove(this);
+    }
 
 
 }

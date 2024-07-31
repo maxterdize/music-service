@@ -7,10 +7,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +15,8 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 public class TrackList {
 
     private String href;

@@ -29,8 +29,9 @@ public class SpotifyTrackService {
         }
 
         try {
-//            spotifyAlbumRepository.saveAndFlush(track.getAlbum());
-//            spotifyTrackRepository.saveAndFlush(track);
+            spotifyArtistRepository.saveAll(track.getArtists());
+            spotifyAlbumRepository.save(track.getAlbum());
+            spotifyTrackRepository.save(track);
         } catch (Exception e) {
             throw new RepositoryTransactionException("Error saving track: " + id, e);
         }
@@ -45,6 +46,7 @@ public class SpotifyTrackService {
                 .build();
     }
 
+    @Transactional
     public TrackResponse getTrackByIsrc(String isrc) {
          Track track = spotifyClient.getTrackByIsrc(isrc).getItems().stream().findFirst().get();
         if (track == null) {

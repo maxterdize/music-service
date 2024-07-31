@@ -5,22 +5,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.music_service.music_service_demo.enums.ModelObjectType;
 import com.neovisionaries.i18n.CountryCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "track")
 @SecondaryTable(name = "track_link", pkJoinColumns = @PrimaryKeyJoinColumn(name = "track_id"))
 public class Track {
+
+    public Track(Long primary_key, String id, Album album, String name, Set<Artist> artists, Set<CountryCode> availableMarkets, Integer discNumber, Integer durationMs, Boolean explicit, Map<String, String> externalIds, Map<String, String> externalUrls, String href, Boolean isPlayable, TrackLink linkedFrom, Restriction restrictions, Integer popularity, String previewUrl, Integer trackNumber, ModelObjectType type, String uri, Boolean isLocal) {
+        this.primary_key = primary_key;
+        this.id = id;
+        this.setAlbum(album);
+        this.name = name;
+        this.artists = artists;
+        this.availableMarkets = availableMarkets;
+        this.discNumber = discNumber;
+        this.durationMs = durationMs;
+        this.explicit = explicit;
+        this.externalIds = externalIds;
+        this.externalUrls = externalUrls;
+        this.href = href;
+        this.isPlayable = isPlayable;
+        this.linkedFrom = linkedFrom;
+        this.restrictions = restrictions;
+        this.popularity = popularity;
+        this.previewUrl = previewUrl;
+        this.trackNumber = trackNumber;
+        this.type = type;
+        this.uri = uri;
+        this.isLocal = isLocal;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,23 +53,22 @@ public class Track {
     private String id;
 
     @JsonProperty("album")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="album_id", nullable=true, referencedColumnName = "id")
+    @ManyToOne
     private Album album;
 
     @JsonProperty("name")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "track_artist",
-            joinColumns = @JoinColumn(name = "artist_id"),
-            inverseJoinColumns = @JoinColumn(name = "track_id"))
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "track_id"),
+                inverseJoinColumns = @JoinColumn(name = "artist_id"))
     @JsonProperty("artists")
-    private Set<Artist> artists;
+    private Set<Artist> artists = new HashSet<>();
+    @Builder.Default
     @ElementCollection
     @JsonProperty("available_markets")
-    private Set<CountryCode> availableMarkets;
+    private Set<CountryCode> availableMarkets = new HashSet<>();
     @Column
     @JsonProperty("disc_number")
     private Integer discNumber;
@@ -56,12 +78,14 @@ public class Track {
     @Column
     @JsonProperty("explicit")
     private Boolean explicit;
+    @Builder.Default
     @ElementCollection
     @JsonProperty("external_ids")
-    private Map<String, String> externalIds;
+    private Map<String, String> externalIds = new HashMap<>();
+    @Builder.Default
     @ElementCollection
     @JsonProperty("external_urls")
-    private Map<String, String> externalUrls;
+    private Map<String, String> externalUrls = new HashMap<>();
     @Column(name = "track_href")
     @JsonProperty("href")
     private String href;
@@ -92,4 +116,9 @@ public class Track {
     @Column
     @JsonProperty("is_local")
     private Boolean isLocal;
+
+    public void setAlbum(Album album) {
+        this.album = album;
+        album.getTracks().add(this);
+    }
 }
