@@ -1,8 +1,9 @@
 package com.music_service.music_service_demo.service;
 
 import com.music_service.music_service_demo.model.Album;
-import com.music_service.music_service_demo.model.Image;
 import com.music_service.music_service_demo.repository.SpotifyAlbumRepository;
+import com.music_service.music_service_demo.rest.AlbumResponse;
+import com.music_service.music_service_demo.rest.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,25 @@ import java.util.stream.Collectors;
 public class SpotifyAlbumService {
 
     private final SpotifyAlbumRepository spotifyAlbumRepository;
+    private final Integer STANDARD_HEIGHT = 500;
+    private final Integer STANDARD_WIDTH = 500;
 
-    public Album getAlbumImageByAlbumId(String albumId) {
+    public AlbumResponse getAlbumByAlbumId(String albumId) {
        Album album = spotifyAlbumRepository.getAlbumById(albumId);
-        Set<Image> images = album.getImages().stream().map((image -> {
-           image.setHeight(500);
-           image.setWidth(500);
-           return image;
+       Set<ImageResponse> images = album.getImages().stream().map((image -> {
+           return ImageResponse.builder()
+                   .url(image.getUrl())
+                   .height(STANDARD_HEIGHT)
+                   .width(STANDARD_WIDTH)
+                   .build();
        })).collect(Collectors.toSet());
 
-       album.setImages(images);
-
-       return album;
+       return AlbumResponse.builder()
+               .id(album.getId())
+               .name(album.getName())
+               .totalTracks(album.getTotalTracks())
+               .images(images)
+               .build();
     }
 
 

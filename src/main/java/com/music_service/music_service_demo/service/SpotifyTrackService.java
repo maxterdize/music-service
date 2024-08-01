@@ -6,6 +6,7 @@ import com.music_service.music_service_demo.exceptions.TrackNotFoundException;
 import com.music_service.music_service_demo.model.Track;
 import com.music_service.music_service_demo.repository.SpotifyAlbumRepository;
 import com.music_service.music_service_demo.repository.SpotifyArtistRepository;
+import com.music_service.music_service_demo.repository.SpotifyImageRepository;
 import com.music_service.music_service_demo.repository.SpotifyTrackRepository;
 import com.music_service.music_service_demo.rest.TrackResponse;
 import jakarta.transaction.Transactional;
@@ -20,10 +21,12 @@ public class SpotifyTrackService {
     private final SpotifyTrackRepository spotifyTrackRepository;
     private final SpotifyAlbumRepository spotifyAlbumRepository;
     private final SpotifyArtistRepository spotifyArtistRepository;
+    private final SpotifyImageRepository spotifyImageRepository;
 
     @Transactional
     public TrackResponse getTrackById(String id) {
         Track track = spotifyClient.getTrackById(id);
+        track.getAlbum().getImages().forEach(image -> image.setAlbum(track.getAlbum()));
         if (track == null) {
             throw new TrackNotFoundException("Error getting track by Id: " + id);
         }
@@ -31,6 +34,7 @@ public class SpotifyTrackService {
         try {
             spotifyArtistRepository.saveAll(track.getArtists());
             spotifyAlbumRepository.save(track.getAlbum());
+            spotifyImageRepository.saveAll(track.getAlbum().getImages());
             spotifyTrackRepository.save(track);
         } catch (Exception e) {
             throw new RepositoryTransactionException("Error saving track: " + id, e);

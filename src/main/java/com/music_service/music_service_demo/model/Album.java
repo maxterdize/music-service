@@ -88,6 +88,4 @@ public class Album {
         this.artists.remove(artist);
         artist.getAlbums().remove(this);
     }
-
-
 }

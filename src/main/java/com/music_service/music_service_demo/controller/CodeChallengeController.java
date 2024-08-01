@@ -2,6 +2,7 @@ package com.music_service.music_service_demo.controller;
 
 import com.music_service.music_service_demo.model.Album;
 import com.music_service.music_service_demo.model.Track;
+import com.music_service.music_service_demo.rest.AlbumResponse;
 import com.music_service.music_service_demo.rest.TrackResponse;
 import com.music_service.music_service_demo.service.SpotifyAlbumService;
 import com.music_service.music_service_demo.service.SpotifyTrackService;
@@ -29,7 +30,7 @@ public class CodeChallengeController {
     }
 
     @GetMapping(value = "/albums/{albumId}", produces = "application/json")
-    public ResponseEntity<Album> getAlbumById(@PathVariable String albumId){
-        return ResponseEntity.ok(spotifyAlbumService.getAlbumImageByAlbumId(albumId));
+    public ResponseEntity<AlbumResponse> getAlbumById(@PathVariable String albumId){
+        return ResponseEntity.ok(spotifyAlbumService.getAlbumByAlbumId(albumId));
     }
 }
