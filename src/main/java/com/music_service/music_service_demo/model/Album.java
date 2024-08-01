@@ -49,7 +49,7 @@ public class Album {
     @JsonProperty("href")
     private String href;
     @Builder.Default
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     @JsonProperty("images")
     private Set<Image> images= new HashSet<>();
     @Column
