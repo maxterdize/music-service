@@ -15,25 +15,25 @@ import java.util.stream.Collectors;
 public class SpotifyAlbumService {
 
     private final SpotifyAlbumRepository spotifyAlbumRepository;
-    private final Integer STANDARD_HEIGHT = 500;
-    private final Integer STANDARD_WIDTH = 500;
+    private static final int STANDARD_HEIGHT = 500;
+    private static final int STANDARD_WIDTH = 500;
 
     public AlbumResponse getAlbumByAlbumId(String albumId) {
-       Album album = spotifyAlbumRepository.getAlbumById(albumId);
-       Set<ImageResponse> images = album.getImages().stream().map((image -> {
-           return ImageResponse.builder()
-                   .url(image.getUrl())
-                   .height(STANDARD_HEIGHT)
-                   .width(STANDARD_WIDTH)
-                   .build();
-       })).collect(Collectors.toSet());
+        Album album = spotifyAlbumRepository.getAlbumById(albumId);
+        Set<ImageResponse> images = album.getImages().stream().map(image ->
+                ImageResponse.builder()
+                        .url(image.getUrl())
+                        .height(STANDARD_HEIGHT)
+                        .width(STANDARD_WIDTH)
+                        .build()
+        ).collect(Collectors.toSet());
 
-       return AlbumResponse.builder()
-               .id(album.getId())
-               .name(album.getName())
-               .totalTracks(album.getTotalTracks())
-               .images(images)
-               .build();
+        return AlbumResponse.builder()
+                .id(album.getId())
+                .name(album.getName())
+                .totalTracks(album.getTotalTracks())
+                .images(images)
+                .build();
     }
 
 

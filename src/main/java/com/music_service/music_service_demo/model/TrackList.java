@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.ElementCollection;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -19,8 +20,9 @@ public class TrackList {
     private Integer limit;
     private Integer offset;
     private Integer total;
+    @Builder.Default
     @ElementCollection
-    List<Track> items;
+    List<Track> items = new ArrayList<>();
 
 
     @JsonCreator

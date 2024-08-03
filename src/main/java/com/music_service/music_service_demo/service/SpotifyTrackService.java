@@ -26,10 +26,11 @@ public class SpotifyTrackService {
     @Transactional
     public TrackResponse getTrackById(String id) {
         Track track = spotifyClient.getTrackById(id);
-        track.getAlbum().getImages().forEach(image -> image.setAlbum(track.getAlbum()));
         if (track == null) {
             throw new TrackNotFoundException("Error getting track by Id: " + id);
         }
+
+        track.getAlbum().getImages().forEach(image -> image.setAlbum(track.getAlbum()));
 
         try {
             spotifyArtistRepository.saveAll(track.getArtists());
@@ -52,10 +53,9 @@ public class SpotifyTrackService {
 
     @Transactional
     public TrackResponse getTrackByIsrc(String isrc) {
-         Track track = spotifyClient.getTrackByIsrc(isrc).getItems().stream().findFirst().get();
-        if (track == null) {
-            throw new TrackNotFoundException("Error getting track by Isrc: " + isrc);
-        }
+        Track track = spotifyClient.getTrackByIsrc(isrc).getItems().stream().findFirst().orElseThrow(() ->
+                new TrackNotFoundException("Error getting track by Isrc: " + isrc));
+
         return TrackResponse.builder()
                 .name(track.getName())
                 .artistName(track.getArtists().stream().findFirst().get().getName())

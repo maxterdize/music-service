@@ -26,37 +26,45 @@ public class Artist {
 
     @JsonProperty("id")
     private String id;
+
     @Column(name = "artist_href")
     @JsonProperty("href")
     private String href;
+
     @Column
     @JsonProperty("name")
     private String name;
+
     @Column
     @JsonProperty("uri")
     private String uri;
+
     @Column
     @JsonProperty("popularity")
     private Integer popularity;
+
     @Builder.Default
     @OneToMany(mappedBy = "artist")
     @JsonProperty("images")
     private Set<Image> images = new HashSet<>();
+
     @Builder.Default
     @ElementCollection
     @JsonProperty("external_urls")
     private Map<String, String> externalUrls = new HashMap<>();
+
     @Embedded
     @JsonProperty("followers")
     private Followers followers;
+
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     @JsonProperty("type")
     private ModelObjectType type;
+
     @Builder.Default
     @ElementCollection
     @JsonProperty("genres")
     private Set<String> genres = new HashSet<>();
-
 
     @Builder.Default
     @ManyToMany(cascade = CascadeType.ALL)
@@ -71,6 +79,24 @@ public class Artist {
                 inverseJoinColumns = @JoinColumn(name = "album_id"))
     private Set<Album> albums = new HashSet<>();
 
+    // Ensure proper handling of circular references
+    public void addTrack(Track track) {
+        this.tracks.add(track);
+        track.getArtists().add(this);
+    }
 
+    public void removeTrack(Track track) {
+        this.tracks.remove(track);
+        track.getArtists().remove(this);
+    }
 
+    public void addAlbum(Album album) {
+        this.albums.add(album);
+        album.getArtists().add(this);
+    }
+
+    public void removeAlbum(Album album) {
+        this.albums.remove(album);
+        album.getArtists().remove(this);
+    }
 }

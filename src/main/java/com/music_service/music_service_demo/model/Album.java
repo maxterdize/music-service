@@ -28,45 +28,57 @@ public class Album {
     @JsonProperty("id")
     @Column(name = "secondary_id")
     private String id;
+
     @Column
     @JsonProperty("album_type")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     private AlbumType albumType;
+
     @Column
     @JsonProperty("total_tracks")
     private Integer totalTracks;
+
     @Column
     @Enumerated
     @Builder.Default
     @ElementCollection(targetClass = CountryCode.class)
     @JsonProperty("available_markets")
     private Set<CountryCode> availableMarkets = new HashSet<>();
+
     @Builder.Default
     @ElementCollection
     @JsonProperty("external_urls")
     private Map<String, String> externalUrls = new HashMap<>();
+
     @Column(name = "album_href")
     @JsonProperty("href")
     private String href;
+
     @Builder.Default
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     @JsonProperty("images")
-    private Set<Image> images= new HashSet<>();
+    private Set<Image> images = new HashSet<>();
+
     @Column
     @JsonProperty("name")
     private String name;
+
     @Column
     @JsonProperty("release_date")
     private String releaseDate;
+
     @Column
     @JsonProperty("release_date_precision")
     private String releaseDatePrecision;
+
     @Embedded
     @JsonProperty("restrictions")
     private Restriction restrictions;
+
     @Column
     @JsonProperty("uri")
     private String uri;
+
     @Builder.Default
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "album_artist",

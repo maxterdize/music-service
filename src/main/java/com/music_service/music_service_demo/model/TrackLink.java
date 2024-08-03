@@ -1,3 +1,4 @@
+// TrackLink.java
 package com.music_service.music_service_demo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,23 +24,27 @@ public class TrackLink {
     @Column(name = "id")
     private BigInteger primary_key;
 
-    @Id
+    // Removed the second @Id annotation to ensure a single primary key
     @Column(name = "secondary_id")
     private String id;
+
     @Column
     @JsonProperty("is_playable")
     private Boolean isPlayable;
+
     @ElementCollection
     @JsonProperty("external_urls")
     private Map<String, String> externalUrls;
+
     @Column(name = "track_link_href")
     @JsonProperty("href")
     private String href;
+
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     @JsonProperty("type")
     private ModelObjectType type;
+
     @Column
     @JsonProperty("uri")
     private String uri;
-
 }

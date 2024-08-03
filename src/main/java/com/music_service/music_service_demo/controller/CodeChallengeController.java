@@ -1,13 +1,10 @@
 package com.music_service.music_service_demo.controller;
 
-import com.music_service.music_service_demo.model.Album;
-import com.music_service.music_service_demo.model.Track;
 import com.music_service.music_service_demo.rest.AlbumResponse;
 import com.music_service.music_service_demo.rest.TrackResponse;
 import com.music_service.music_service_demo.service.SpotifyAlbumService;
 import com.music_service.music_service_demo.service.SpotifyTrackService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

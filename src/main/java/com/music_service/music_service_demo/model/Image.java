@@ -28,9 +28,11 @@ public class Image {
     @Column
     @JsonProperty("url")
     private String url;
+
     @Column
     @JsonProperty("height")
     private Integer height;
+
     @Column
     @JsonProperty("width")
     private Integer width;
@@ -43,11 +45,15 @@ public class Image {
 
     public void setAlbum(Album album) {
         this.album = album;
-        album.getImages().add(this);
+        if (album != null) {
+            album.getImages().add(this);
+        }
     }
 
     public void setArtist(Artist artist) {
         this.artist = artist;
-        artist.getImages().add(this);
+        if (artist != null) {
+            artist.getImages().add(this);
+        }
     }
 }
