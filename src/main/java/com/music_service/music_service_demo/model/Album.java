@@ -30,6 +30,10 @@ public class Album {
     private String id;
 
     @Column
+    @Builder.Default
+    private String isrc = "";
+
+    @Column
     @JsonProperty("album_type")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     private AlbumType albumType;

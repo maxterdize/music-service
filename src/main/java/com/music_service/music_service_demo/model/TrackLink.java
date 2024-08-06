@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class TrackLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private BigInteger primary_key;
+    private Long primary_key;
 
     // Removed the second @Id annotation to ensure a single primary key
     @Column(name = "secondary_id")
@@ -32,9 +33,10 @@ public class TrackLink {
     @JsonProperty("is_playable")
     private Boolean isPlayable;
 
+    @Builder.Default
     @ElementCollection
     @JsonProperty("external_urls")
-    private Map<String, String> externalUrls;
+    private Map<String, String> externalUrls = new HashMap<>();
 
     @Column(name = "track_link_href")
     @JsonProperty("href")
@@ -47,4 +49,7 @@ public class TrackLink {
     @Column
     @JsonProperty("uri")
     private String uri;
+
+    @OneToOne(mappedBy = "linkedFrom")
+    private Track track;
 }

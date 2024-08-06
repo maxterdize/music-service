@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SpotifyAlbumRepository extends JpaRepository<Album, String> {
 
     Album getAlbumById(String secondaryId);
+    Album getAlbumByIsrc(String isrc);
 }

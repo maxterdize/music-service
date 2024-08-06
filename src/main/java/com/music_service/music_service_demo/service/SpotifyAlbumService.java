@@ -1,6 +1,8 @@
 package com.music_service.music_service_demo.service;
 
+import com.music_service.music_service_demo.exceptions.TrackNotFoundException;
 import com.music_service.music_service_demo.model.Album;
+import com.music_service.music_service_demo.model.Image;
 import com.music_service.music_service_demo.repository.SpotifyAlbumRepository;
 import com.music_service.music_service_demo.rest.AlbumResponse;
 import com.music_service.music_service_demo.rest.ImageResponse;
@@ -33,6 +35,17 @@ public class SpotifyAlbumService {
                 .name(album.getName())
                 .totalTracks(album.getTotalTracks())
                 .images(images)
+                .build();
+    }
+
+    public ImageResponse getCoverByIsrc(String isrc) {
+        Image image = spotifyAlbumRepository.getAlbumByIsrc(isrc).getImages().stream().findFirst().orElseThrow(() ->
+                new TrackNotFoundException("Error getting track by Isrc: " + isrc));
+
+        return ImageResponse.builder()
+                .url(image.getUrl())
+                .height(500)
+                .width(500)
                 .build();
     }
 

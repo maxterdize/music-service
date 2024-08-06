@@ -18,7 +18,6 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "track")
-@SecondaryTable(name = "track_link", pkJoinColumns = @PrimaryKeyJoinColumn(name = "track_id"))
 public class Track {
 
     @Id
@@ -27,6 +26,10 @@ public class Track {
 
     @JsonProperty("id")
     private String id;
+
+    @Builder.Default
+    @Column
+    private String isrc = "";
 
     @JsonProperty("album")
     @ManyToOne
@@ -109,7 +112,11 @@ public class Track {
     @JsonProperty("is_local")
     private Boolean isLocal;
 
-    public Track(Long primary_key, String id, Album album, String name, Set<Artist> artists, Set<CountryCode> availableMarkets, Integer discNumber, Integer durationMs, Boolean explicit, Map<String, String> externalIds, Map<String, String> externalUrls, String href, Boolean isPlayable, TrackLink linkedFrom, Restriction restrictions, Integer popularity, String previewUrl, Integer trackNumber, ModelObjectType type, String uri, Boolean isLocal) {
+    public Track(Long primary_key, String id, String isrc, Album album, String name, Set<Artist> artists,
+                 Set<CountryCode> availableMarkets, Integer discNumber, Integer durationMs, Boolean explicit,
+                 Map<String, String> externalIds, Map<String, String> externalUrls, String href, Boolean isPlayable,
+                 TrackLink linkedFrom, Restriction restrictions, Integer popularity, String previewUrl, Integer trackNumber,
+                 ModelObjectType type, String uri, Boolean isLocal) {
         this.primary_key = primary_key;
         this.id = id;
         this.setAlbum(album);
@@ -131,6 +138,7 @@ public class Track {
         this.type = type;
         this.uri = uri;
         this.isLocal = isLocal;
+        this.isrc = isrc;
     }
 
     public void setAlbum(Album album) {

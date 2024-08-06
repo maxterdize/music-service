@@ -17,6 +17,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/createTrack", "/getTrackMetadata", "/getTrackMetadata/**", "/albums/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -24,7 +25,7 @@ public class SecurityConfig {
                 .httpBasic(withDefaults());
 
         // Configure CSRF protection and frame options for H2 console
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**", "/createTrack", "/getTrackMetadata", "/getTrackMetadata/**", "/albums/**"));
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
